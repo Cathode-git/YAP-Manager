@@ -300,6 +300,9 @@ $buttonSearch_Click={
 $ErrorActionPreference= 'silentlycontinue'
 [xml]$ConfigFile = Get-Content .\config.xml
 $datasource=$ConfigFile.config.DB.path
+if ((Test-Path $ConfigFile.config.DB.path) -eq $false){
+[System.Windows.Forms.MessageBox]::Show("Can't find the database, check config.xml ","Error");
+}else {
 $DataGridView1.rows.clear()
 $ado = New-Object -ComObject ADODB.Connection
 $ado.open("Provider = Microsoft.ACE.OLEDB.12.0;Data Source= $datasource")
@@ -339,6 +342,7 @@ $DataGridView1.Rows.Add($row)
 	} until ($recordset.EOF -eq $True)
 $recordset.close()
 $ado.close()
+}
 }
 
 function Load-DataGridView
@@ -903,7 +907,7 @@ Start-Process "$donation"
 	
 }
 ]]></Code>
-  <Mode>0</Mode>
+  <Mode>1</Mode>
   <Assemblies>
     <Assembly>System.Management.Automation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35</Assembly>
     <Assembly>System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</Assembly>
